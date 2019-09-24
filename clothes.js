@@ -2,6 +2,12 @@
 var canvas = document.getElementById("myCanvas");
 var ctx = canvas.getContext("2d");
 
+//useful functions
+function getRandomInt(max) {
+    return Math.floor(Math.random() * Math.floor(max));
+}
+
+//mouse functions & actions
 var mouse = {
     down: false
     ,selected: undefined
@@ -55,8 +61,8 @@ var man = new Man();
 
 //clothes: x,y
 function Clothes() {
-    this.x = 0;
-    this.y = 0;
+    this.x = getRandomInt(parseInt(canvas.width / 2));
+    this.y = 360 + getRandomInt(10);
 }
 Clothes.prototype.setImage = function (src) {
     var img = new Image;
@@ -76,13 +82,16 @@ Clothes.prototype.draw = function () {
     ctx.closePath();
 }
 var clothes_array = []
-for (var i = 0; i < 4; i++) {
+for (var i = 0; i < 7; i++) {
     clothes_array[i] = new Clothes();
 }
 clothes_array[0].setImage("image/mtm0.png")
 clothes_array[1].setImage("image/jeans0.png")
 clothes_array[2].setImage("image/shirts0.png")
 clothes_array[3].setImage("image/hat0.png")
+clothes_array[4].setImage("image/stick0.png")
+clothes_array[5].setImage("image/mask0.png")
+clothes_array[6].setImage("image/shorts0.png")
 
 clothes_array.move = function () {
     var i;
@@ -96,9 +105,9 @@ clothes_array.move = function () {
                 }
             }
         }
-        if (0 <= mouse.selected && mouse.selected < this.length) {
-            this[mouse.selected].x = mouse.x-25;
-            this[mouse.selected].y = mouse.y-25;
+        if (mouse.selected!==undefined) {
+            this[mouse.selected].x = mouse.x - this[mouse.selected].image.naturalWidth / 2;
+            this[mouse.selected].y = mouse.y - this[mouse.selected].image.naturalHeight / 2;
         }
     }
 }
@@ -113,12 +122,6 @@ function draw() {
     }
 
     clothes_array.move();
-
-    ctx.beginPath();
-    ctx.font = "20px Georgia";
-    ctx.fillStyle = "black";
-    ctx.fillText(mouse.selected, 10, 50);
-    ctx.closePath();
 }
 
 setInterval(draw, 40);
